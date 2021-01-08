@@ -1,12 +1,21 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native';
-import {IResultsDetailProps} from '../types/result-details';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {withNavigation} from 'react-navigation';
+import {NavigationStackProp} from 'react-navigation-stack';
+import {IResultsDetailProps, RESULTS_PARAMS} from '../types/result-details';
+import {SCREENS} from '../types/screens';
 import ResultsDetail from './ResultsDetail';
+
 interface IResultsListProps {
   title: string;
   results: Array<any>;
+  navigation?: NavigationStackProp;
 }
-const ResultsList = ({title, results}: IResultsListProps) => {
+
+const ResultsList = ({title, results, navigation}: IResultsListProps) => {
+  if (!results.length) {
+    return null;
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.titleStyle}>{title}</Text>
@@ -16,7 +25,16 @@ const ResultsList = ({title, results}: IResultsListProps) => {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(result: any) => result.id}
         renderItem={({item}: {item: IResultsDetailProps}) => {
-          return <ResultsDetail result={item} />;
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation?.navigate(SCREENS.ResultsShow, {
+                  [RESULTS_PARAMS.id]: item.id,
+                })
+              }>
+              <ResultsDetail result={item} />
+            </TouchableOpacity>
+          );
         }}
       />
     </View>
@@ -35,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResultsList;
+export default withNavigation(ResultsList);

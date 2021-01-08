@@ -1,10 +1,15 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {NavigationStackProp} from 'react-navigation-stack';
 import ResultsList from '../components/ResultsList';
 import SearchBar from '../components/SearchBar';
 import useResults from '../hooks/useResults';
 
 type price = '$' | '$$' | '$$$' | '$$$$';
+
+export interface ISearchScreenProps {
+  navigation: NavigationStackProp;
+}
 
 const SearchScreen = () => {
   const [term, setTerm] = useState<string>('');
